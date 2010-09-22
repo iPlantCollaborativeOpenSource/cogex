@@ -13,6 +13,7 @@ lib/CoGeX/Result/FeatureListConnector.pm
 lib/CoGeX/Result/FeatureListGroup.pm
 lib/CoGeX/Result/FeatureListGroupImageConnector.pm
 lib/CoGeX/Result/FeatureName.pm
+lib/CoGeX/Result/FeatureSummary.pm
 lib/CoGeX/Result/FeatureType.pm
 lib/CoGeX/Result/GenomicSequence.pm
 lib/CoGeX/Result/GenomicSequenceType.pm
@@ -80,6 +81,7 @@ scripts/FeatAnnoX.pl
 scripts/feature_by_name_and_type.pl
 scripts/feature_go.pl
 scripts/feature_merge.pl
+scripts/feature_summary_by_dataset_id
 scripts/FeatViewX.pl
 scripts/find_and_fix_feature_strand_errors.pl
 scripts/find_datasets_with_no_sequence.pl

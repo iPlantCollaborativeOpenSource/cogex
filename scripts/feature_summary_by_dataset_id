@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+use CoGeX;
+
+my $coge =  CoGeX->dbconnect();
+
+for my $dataset_id (@ARGV) {
+    print "Dataset ID: $dataset_id\n";
+    my $rs = $coge->resultset('FeatureSummary')->search( {}, { 'bind' => [ $dataset_id ] } );
+    while ( my $feature_summary = $rs->next() ) {
+        my $feature_type_id = $feature_summary->feature_type_id();
+        my $feature_type_name = $feature_summary->feature_type_name();
+        my $feature_count = $feature_summary->feature_count();
+        print "\t$feature_type_name\t$feature_type_id\t$feature_count\n";
+    }
+    print "\n";
+}
+
+exit;
+
+    
