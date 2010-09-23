@@ -12,13 +12,16 @@ CoGeX::Result::FeatureSummary
 =head1 SYNOPSIS
 
 This object defines a view that can be used to obtain summarized feature
-information for a dataset in the CoGe database.
+information for a dataset group in the CoGe database.
 
 =head1 DESCRIPTION
 
 Has columns:
-C<feature_type_id> (Primary Key)
+C<feature_type_id>
 Type: INT, Default: undef, Nullable: no, Size: 11
+
+C<feature_type_name>
+Type: VARCHAR, Default: "", Nullable: no, Size: 255
 
 C<feature_count>
 Type: INT, Default: undef, Nullable: no, Size: 11
