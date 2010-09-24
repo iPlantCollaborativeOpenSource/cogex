@@ -207,8 +207,18 @@ sub genomic_sequence_types
     my %data;
     foreach my $ds ($self->datasets)
       {
-	my $type = $ds->sequence_type;
-	$data{$type->id} = $type;
+        my $types_ref = $ds->sequence_type;
+        if (defined $types_ref)
+          {
+            if ( ref $types_ref ne 'ARRAY' )
+              {
+                $types_ref = [ $types_ref ];
+              }
+            foreach my $type (@{$types_ref})
+              {
+                $data{$type->id} = $type;
+              }
+          }
       }
     return wantarray ? values %data : [values %data];
   }
