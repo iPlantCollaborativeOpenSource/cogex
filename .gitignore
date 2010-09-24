@@ -1,6 +1,7 @@
 # Ignore backup files.
 *~
 *.bak
+*.old
 .#*
 
 # Ignore generated files and directories.
