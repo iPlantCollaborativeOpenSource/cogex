@@ -8,26 +8,30 @@ use Test::More tests => 5;
 
 BEGIN { use_ok( 'CoGeX' ); }
 
-my $connstr = 'dbi:mysql:genomes:biocon:3306';
-my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
+SKIP: {
+    skip "test database not available", 4 if !exists $ENV{HAVE_TESTDB};
 
-#$s->storage->debug(1);
+    my $connstr = 'dbi:mysql:genomes:biocon:3306';
+    my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
 
-isa_ok ($s, 'CoGeX');
+    #$s->storage->debug(1);
 
-my $rs = $s->resultset('Dataset')->search( { name => 'CHR1.R5v01212004.xml' } );
+    isa_ok ($s, 'CoGeX');
 
-my $d = $rs->next();
-#diag( "\n\tDescription: " . $d->description() );
+    my $rs = $s->resultset('Dataset')->search( { name => 'CHR1.R5v01212004.xml' } );
 
-my @features = $d->features( { feature_id => 2377 } );
+    my $d = $rs->next();
+    #diag( "\n\tDescription: " . $d->description() );
 
-#diag( "Feature array size is " . scalar(@features) );
-is( scalar(@features), 1);
+    my @features = $d->features( { feature_id => 2377 } );
 
-my $f = $features[0];
-my @fnames = $f->feature_names();
-is( scalar(@fnames), 5);
+    #diag( "Feature array size is " . scalar(@features) );
+    is( scalar(@features), 1);
 
-#diag( $fnames[0]->name() );
-is( $fnames[0]->name(), "At1g55470" );
+    my $f = $features[0];
+    my @fnames = $f->feature_names();
+    is( scalar(@fnames), 5);
+
+    #diag( $fnames[0]->name() );
+    is( $fnames[0]->name(), "At1g55470" );
+}

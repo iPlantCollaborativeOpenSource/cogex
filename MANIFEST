@@ -174,7 +174,6 @@ t/010_features_in_region.t
 t/011_features_in_region_split.t
 t/012_feature_in_region_locs.t
 t/013_features_in_region_ecoli.t
-t/014_get_seq.t
 t/asdf.fasta
 t/asdf.fasta.nhr
 t/asdf.fasta.nin

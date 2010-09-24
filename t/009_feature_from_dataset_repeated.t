@@ -5,41 +5,45 @@
 use Test::More tests => 5;
 
 BEGIN {
-  use_ok( 'CoGeX' );
-  use_ok( 'DBIxProfiler' );
+    use_ok( 'CoGeX' );
+    use_ok( 'DBIxProfiler' );
 }
 
-my $connstr = 'dbi:mysql:genomes:biocon:3306';
-my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
+SKIP: {
+    skip "test database not available", 3 if !exists $ENV{HAVE_TESTDB};
 
-$s->storage->debugobj(new DBIxProfiler());
-$s->storage->debug(1);
+    my $connstr = 'dbi:mysql:genomes:biocon:3306';
+    my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
 
-isa_ok ($s, 'CoGeX');
+    $s->storage->debugobj(new DBIxProfiler());
+    $s->storage->debug(1);
 
-my $rs = $s->resultset('Feature')->search(
-                    { 
-                      'organism.name' => { 'like' => 'Nostoc%' }
-                    },
-                    {
-                      join => { dataset => 'organism' },
-                      prefetch => { dataset => 'organism' },
-                    }
-                );
+    isa_ok ($s, 'CoGeX');
 
-my @features = $rs->all();
-is( scalar(@features), 10863 );
+    my $rs = $s->resultset('Feature')->search(
+        { 
+            'organism.name' => { 'like' => 'Nostoc%' }
+        },
+        {
+            join => { dataset => 'organism' },
+            prefetch => { dataset => 'organism' },
+        }
+    );
 
-$rs = $s->resultset('Feature')->search(
-                    { 
-                      'organism.name' => { 'like' => 'Drosophila%' },
-                      'me.feature_id' => 1367613
-                    },
-                    {
-                      join => { dataset => 'organism' },
-                      prefetch => qw/locations/
-                    }
-                );
+    my @features = $rs->all();
+    is( scalar(@features), 10863 );
 
-my @features2 = $rs->all();
-is( scalar(@features2), 1 );
+    $rs = $s->resultset('Feature')->search(
+        { 
+            'organism.name' => { 'like' => 'Drosophila%' },
+            'me.feature_id' => 1367613
+        },
+        {
+            join => { dataset => 'organism' },
+            prefetch => qw/locations/
+        }
+    );
+
+    my @features2 = $rs->all();
+    is( scalar(@features2), 1 );
+}

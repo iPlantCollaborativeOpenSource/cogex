@@ -12,9 +12,13 @@ my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
 
 isa_ok ($s, 'CoGeX');
 
-my $rs = $s->resultset('Feature')->search( feature_id => 42 );
+SKIP: {
+    skip "test database not available", 2 if !exists $ENV{HAVE_TESTDB};
 
-my $f = $rs->next();
+    my $rs = $s->resultset('Feature')->search( feature_id => 42 );
 
-is( $f->feature_type_id(), 3 );
-is( $f->dataset_id(),      2 );
+    my $f = $rs->next();
+
+    is( $f->feature_type_id(), 3 );
+    is( $f->dataset_id(),      2 );
+}

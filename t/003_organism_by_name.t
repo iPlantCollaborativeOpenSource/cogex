@@ -6,18 +6,22 @@ use Test::More tests => 4;
 
 BEGIN { use_ok( 'CoGeX' ); }
 
-my $connstr = 'dbi:mysql:genomes:biocon:3306';
-my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
+SKIP: {
+    skip "test database not available", 3 if !exists $ENV{HAVE_TESTDB};
 
-isa_ok ($s, 'CoGeX');
+    my $connstr = 'dbi:mysql:genomes:biocon:3306';
+    my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
 
-my $rs = $s->resultset('Organism')->search(
-                                      { 
-                                        name => { 'like' => 'Nostoc%' }
-                                      }
-                                    );
+    isa_ok ($s, 'CoGeX');
 
-my @orgs = $rs->all();
+    my $rs = $s->resultset('Organism')->search(
+        { 
+            name => { 'like' => 'Nostoc%' }
+        }
+    );
 
-is( scalar(@orgs),           1  );
-is( $orgs[0]->organism_id(), 24 );
+    my @orgs = $rs->all();
+
+    is( scalar(@orgs),           1  );
+    is( $orgs[0]->organism_id(), 24 );
+}

@@ -9,19 +9,23 @@ use Test::More tests => 4;
 #1
 BEGIN { use_ok( 'CoGeX' ); }
 
-my $connstr = 'dbi:mysql:genomes:biocon:3306';
-my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
+SKIP: {
+    skip "test database not available", 3 if !exists $ENV{HAVE_TESTDB};
 
-#2
-isa_ok ($s, 'CoGeX');
-my $feature = $s->resultset('Feature')->find(1);
-my $genomeseq = substr($feature->genomic_sequence(), 0, 10);
+    my $connstr = 'dbi:mysql:genomes:biocon:3306';
+    my $s = CoGeX->connect($connstr, 'cnssys', 'CnS' );
 
-#3
-is( $genomeseq, "AGACAGAATC");
+    #2
+    isa_ok ($s, 'CoGeX');
+    my $feature = $s->resultset('Feature')->find(1);
+    my $genomeseq = substr($feature->genomic_sequence(), 0, 10);
 
-#4
-$feature = $s->resultset('Feature')->find(2);
-my @seqs = $feature->genomic_sequence();
+    #3
+    is( $genomeseq, "AGACAGAATC");
 
-is( scalar @seqs, 9);
+    #4
+    $feature = $s->resultset('Feature')->find(2);
+    my @seqs = $feature->genomic_sequence();
+
+    is( scalar @seqs, 9);
+}
